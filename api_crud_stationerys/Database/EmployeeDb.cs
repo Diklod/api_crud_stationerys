@@ -3,9 +3,9 @@ using Npgsql;
 
 namespace api_crud_stationerys.Database
 {
-    public class ClientDb
+    public class EmployeeDb
     {
-        public bool Add(Client client)
+        public bool Add(Employee employee)
         {
             bool result = false;
 
@@ -13,25 +13,24 @@ namespace api_crud_stationerys.Database
             {
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
-                    // VERIFICAR CASO SEJA ALTERADO
-                    if (client.City == null)
-                        // Default pasa cidade, caso não informado
-                        client.City = "Caxias do Sul";
-                    if (client.State == null)
-                        // Default pasa estado, caso não informado
-                        client.State = "RS";
+                    //// VERIFICAR CASO SEJA ALTERADO
+                    //if (employee.City == null)
+                    //    // Default pasa cidade, caso não informado
+                    //    employee.City = "Caxias do Sul";
+                    //if (employee.State == null)
+                    //    // Default pasa estado, caso não informado
+                    //    employee.State = "RS";
 
-                    command.CommandText = @"INSERT INTO clients " +
-                                         @"(name, cpf, email, phone, city, state) " +
+                    command.CommandText = @"INSERT INTO employees " +
+                                         @"(name, cpf, email, phone, job_id) " +
                                          @"VALUES " +
-                                         @"(@name, @cpf, @email, @phone, @city, @state);";
+                                         @"(@name, @cpf, @email, @phone, @job_id);";
 
-                    command.Parameters.AddWithValue("@name", client.Name);
-                    command.Parameters.AddWithValue("@cpf", client.Cpf);
-                    command.Parameters.AddWithValue("@email", client.Email);
-                    command.Parameters.AddWithValue("@phone", client.Phone);
-                    command.Parameters.AddWithValue("@city", client.City);
-                    command.Parameters.AddWithValue("@state", client.State);
+                    command.Parameters.AddWithValue("@name", employee.Name);
+                    command.Parameters.AddWithValue("@cpf", employee.Cpf);
+                    command.Parameters.AddWithValue("@email", employee.Email);
+                    command.Parameters.AddWithValue("@phone", employee.Phone);
+                    command.Parameters.AddWithValue("@job_id", employee.JobId);
 
                     AccessDb db = new AccessDb();
 
@@ -50,16 +49,16 @@ namespace api_crud_stationerys.Database
             return result;
         }
 
-        public Client Get(int id)
+        public Employee Get(int id)
         {
-            Client result = new Client();
+            Employee result = new Employee();
             AccessDb db = new AccessDb();
 
             try
             {
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
-                    command.CommandText = @"SELECT * FROM clients " +
+                    command.CommandText = @"SELECT * FROM employees " +
                                           @"WHERE id = @id;";
 
                     command.Parameters.AddWithValue("@id", id);
@@ -74,8 +73,7 @@ namespace api_crud_stationerys.Database
                             result.Cpf = reader["cpf"].ToString();
                             result.Email = reader["email"].ToString();
                             result.Phone = reader["phone"].ToString();
-                            result.City = reader["city"].ToString();
-                            result.State = reader["state"].ToString();
+                            result.JobId = Convert.ToInt32(reader["job_id"]);
                         }
                     }
                 }
@@ -89,31 +87,30 @@ namespace api_crud_stationerys.Database
             return result;
         }
 
-        public List<Client> GetAll()
+        public List<Employee> GetAll()
         {
-            List<Client> result = new List<Client>();
+            List<Employee> result = new List<Employee>();
             AccessDb db = new AccessDb();
 
             try
             {
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
-                    command.CommandText = @"SELECT * FROM clients ORDER BY id;";
+                    command.CommandText = @"SELECT * FROM employees ORDER BY id;";
 
                     using (command.Connection = db.OpenConnection())
                     using (NpgsqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            Client client = new Client();
-                            client.Id = Convert.ToInt32(reader["id"]);
-                            client.Name = reader["name"].ToString();
-                            client.Cpf = reader["cpf"].ToString();
-                            client.Email = reader["email"].ToString();
-                            client.Phone = reader["phone"].ToString();
-                            client.City = reader["city"].ToString();
-                            client.State = reader["state"].ToString();
-                            result.Add(client);
+                            Employee employee = new Employee();
+                            employee.Id = Convert.ToInt32(reader["id"]);
+                            employee.Name = reader["name"].ToString();
+                            employee.Cpf = reader["cpf"].ToString();
+                            employee.Email = reader["email"].ToString();
+                            employee.Phone = reader["phone"].ToString();
+                            employee.JobId = Convert.ToInt32(reader["job_id"]);
+                            result.Add(employee);
                         }
                     }
                 }
@@ -127,7 +124,7 @@ namespace api_crud_stationerys.Database
             return result;
         }
 
-        public bool Update(Client client)
+        public bool Update(Employee employee)
         {
             bool result = false;
             AccessDb db = new AccessDb();
@@ -135,23 +132,20 @@ namespace api_crud_stationerys.Database
             {
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
-                    command.CommandText = @"UPDATE clients " +
+                    command.CommandText = @"UPDATE employees " +
                                       @"SET name = @name, " +
                                       @"cpf = @cpf, " +
                                       @"email = @email, " +
                                       @"phone = @phone, " +
-                                      @"city = @city, " +
-                                      @"state = @state " +
+                                      @"job_id = @job_id " +
                                       @"WHERE id = @id;";
 
-                    command.Parameters.AddWithValue("@id", client.Id);
-                    command.Parameters.AddWithValue("@name", client.Name);
-                    command.Parameters.AddWithValue("@cpf", client.Cpf);
-                    command.Parameters.AddWithValue("@email", client.Email);
-                    command.Parameters.AddWithValue("@phone", client.Phone);
-                    command.Parameters.AddWithValue("@city", client.City);
-                    command.Parameters.AddWithValue("@state", client.State);
-
+                    command.Parameters.AddWithValue("@id", employee.Id);
+                    command.Parameters.AddWithValue("@name", employee.Name);
+                    command.Parameters.AddWithValue("@cpf", employee.Cpf);
+                    command.Parameters.AddWithValue("@email", employee.Email);
+                    command.Parameters.AddWithValue("@phone", employee.Phone);
+                    command.Parameters.AddWithValue("@job_id", employee.JobId);
                     using (command.Connection = db.OpenConnection())
                     {
                         command.ExecuteNonQuery();
@@ -173,7 +167,7 @@ namespace api_crud_stationerys.Database
             {
                 using (NpgsqlCommand command = new NpgsqlCommand())
                 {
-                    command.CommandText = @"DELETE FROM clients WHERE id = @id;";
+                    command.CommandText = @"DELETE FROM employees WHERE id = @id;";
 
                     command.Parameters.AddWithValue("@id", id);
 

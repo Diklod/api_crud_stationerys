@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace api_crud_stationerys.Controllers
 {
     [ApiController]
-    [Route("api/Client")]
-    public class ClientController : Controller
+    [Route("api/Employee")]
+    public class EmployeeController : Controller
     {
         [HttpPost]
         [Route("Add")]
-        public JsonResult Add(Client client)
+        public JsonResult Add(Employee employee)
         {
-            ClientDb clientDb = new ClientDb();
-            bool response = clientDb.Add(client);
+            EmployeeDb employeeDb = new EmployeeDb();
+            bool response = employeeDb.Add(employee);
 
             if (response)
             {
@@ -30,12 +30,12 @@ namespace api_crud_stationerys.Controllers
         [Route("Get")]
         public JsonResult Get(int id)
         {
-            ClientDb clientDb = new ClientDb();
-            Client client = clientDb.Get(id);
+            EmployeeDb employeeDb = new EmployeeDb();
+            Employee employee = employeeDb.Get(id);
 
-            if (client != null && client.Id > 0)
+            if (employee != null && employee.Id > 0)
             {
-                return new JsonResult(new { success = true, data = client });
+                return new JsonResult(new { success = true, data = employee });
             }
 
             else
@@ -48,11 +48,11 @@ namespace api_crud_stationerys.Controllers
         [Route("GetAll")]
         public JsonResult GetAll()
         {
-            ClientDb clientDb = new ClientDb();
-            List<Client> clients = clientDb.GetAll();
-            if (clients.Count() > 0)
+            EmployeeDb employeeDb = new EmployeeDb();
+            List<Employee> employees = employeeDb.GetAll();
+            if (employees.Count() > 0)
             {
-                return new JsonResult(new { success = true, data = clients });
+                return new JsonResult(new { success = true, data = employees });
             }
             else
             {
@@ -62,10 +62,10 @@ namespace api_crud_stationerys.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public JsonResult Put([FromBody] Client client)
+        public JsonResult Put([FromBody] Employee employee)
         {
-            ClientDb clientDb = new ClientDb();
-            bool success = clientDb.Update(client);
+            EmployeeDb employeeDb = new EmployeeDb();
+            bool success = employeeDb.Update(employee);
 
             if (success)
                 return new JsonResult(new { success = true, data = "Alterado" });
@@ -77,8 +77,8 @@ namespace api_crud_stationerys.Controllers
         [Route("Delete")]
         public JsonResult Delete(int id)
         {
-            ClientDb clientDb = new ClientDb();
-            bool success = clientDb.Delete(id);
+            EmployeeDb employeeDb = new EmployeeDb();
+            bool success = employeeDb.Delete(id);
 
             if (success)
                 return new JsonResult(new { success = true, data = "Excluído" });
