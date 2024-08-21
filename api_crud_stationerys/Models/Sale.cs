@@ -1,6 +1,6 @@
 ﻿namespace api_crud_stationerys.Models
 {
-    public class Sales
+    public class Sale
     {
         public int Id { get; set; }
         public DateTime Log { get; set; }

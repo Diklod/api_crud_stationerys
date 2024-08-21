@@ -15,10 +15,10 @@ namespace api_crud_stationerys.Database
                 {
                     // VERIFICAR CASO SEJA ALTERADO
                     if (client.City == null)
-                        // Default pasa cidade, caso não informado
+                        // Default para cidade, caso não informado
                         client.City = "Caxias do Sul";
                     if (client.State == null)
-                        // Default pasa estado, caso não informado
+                        // Default para estado, caso não informado
                         client.State = "RS";
 
                     command.CommandText = @"INSERT INTO clients " +
